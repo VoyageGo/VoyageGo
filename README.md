@@ -64,9 +64,11 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
   * Explore Map -> Rewards Screen (After mission completion)
   * Profile -> View Travel Achievements/History
   * Settings -> Toggle Options -> Offline Mode
+
+    
   * Settings -> Offline Mode -> Explore Map (without connectivity)
   * Travel Journal -> Share or Edit Journal Entries
   * Real-time Notifications -> Travel Mission/Rewards
 
 ## Wireframes 
-
+![concepts wireframe -1](https://github.com/user-attachments/assets/a2aa45ff-eead-4a05-8c2b-102f8a3a6939)
