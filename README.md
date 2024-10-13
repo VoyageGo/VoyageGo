@@ -38,6 +38,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
  * Offline mode for maps, AI interactions, and challenge tracking without internet access.
 
 ### 2. Screens
+
 **Login Screen:** Users sign in or create an account to access their AI travel buddy and profile information.
 **Travel Dashboard:** Personalized recommendations for nearby attractions, restaurants, and events based on the user’s preferences and real-time data
 **Interactive Map:**  Features the interactive map with recommendations, missions, and activities.
