@@ -131,4 +131,9 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 | type                  | string          | type of the reward                                          |
 | pointsCost            | number          | number of reward points required to redeem  the award       |
 | description           | string          | details about the award                                     |
-| availability          | string          | whether the award is currently available                   |
+| availability          | string          | whether the award is currently available                    |
+
+
+### Networking
+
+#### List of network requests by screen
