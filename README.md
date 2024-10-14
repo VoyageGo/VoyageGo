@@ -88,7 +88,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 | name                  | string          | user's full name                                            |
 | email                 | string          | user's email address                                        |
 | personalityType       | string          | user's personality type                                     |
-| rewardsPoints         | number          | total reward points earned by the user.                     |
+| rewardsPoints         | number          | total reward points earned by the user                      |
 | completedChallenges   | number          | list of challenge IDs the user has completed                |
 | favoriteDestinations  | number          | list of location IDs that the user has marked as favorites  |
 
@@ -131,4 +131,4 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 | type                  | string          | type of the reward                                          |
 | pointsCost            | number          | number of reward points required to redeem  the award       |
 | description           | string          | details about the award                                     |
-| availability          | string          | whether the award ois currently available                   |
+| availability          | string          | whether the award is currently available                   |
