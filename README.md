@@ -79,9 +79,9 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 
 ## Schema
 
-## Models
+### Models
 
-## User
+### User
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
 | userId                | string          | unique identifier for the user                              |
@@ -92,7 +92,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 | completedChallenges   | number          | list of challenge IDs the user has completed                |
 | favoriteDestinations  | number          | list of location IDs that the user has marked as favorites  |
 
-## Location
+### Location
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
 | locationId            | string          | unique identifier for the location                          |
@@ -103,7 +103,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 | relatedEvents         | array           | list of event IDs related to the location                   |
 | personalityMatches    | array           | list of personality types that would enjoy this location    |
 
-## Event
+### Event
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
 | eventId               | string          | unique identifier for the event                             |
@@ -114,7 +114,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 | locationId            | string          | the location where the event takes place                    |
 | personalityMatches    | array           | list of personality types that match the event              |
 
-## Challenge
+### Challenge
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
 | challengeId           | string          | unique identifier for the challenge                         |
@@ -123,7 +123,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 | rewardPoints          | number          | number of reward points awarded upon completion             |
 | eventId               | string          | the ID of an assosiated event                               |
 
-## Reward
+### Reward
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
 | rewardId              | string          | unique identifier for the reward                            |
