@@ -81,7 +81,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 
 ### Models
 
-### User
+#### User
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
 | userId                | string          | unique identifier for the user                              |
