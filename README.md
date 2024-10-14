@@ -75,3 +75,60 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 ![concepts wireframe -1](https://github.com/user-attachments/assets/a2aa45ff-eead-4a05-8c2b-102f8a3a6939)
 
 [WireFrame Interactive Video](https://github.com/VoyageGo/VoyageGo/blob/main/Wirefram.mp4)
+
+
+## Schema
+
+## Models
+
+## User
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| userId                | string          | unique identifier for the user                              |
+| name                  | string          | user's full name                                            |
+| email                 | string          | user's email address                                        |
+| personalityType       | string          | user's personality type                                     |
+| rewardsPoints         | number          | total reward points earned by the user.                     |
+| completedChallenges   | number          | list of challenge IDs the user has completed                |
+| favoriteDestinations  | number          | list of location IDs that the user has marked as favorites  |
+
+## Location
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| locationId            | string          | unique identifier for the location                          |
+| name                  | string          | name of the location                                        |
+| type                 `| string          | type of location                                            |
+| description           | string          | brief description of the location                           |
+| coordinates           | map             | latitude and longitude of location                          |
+| relatedEvents         | array           | list of event IDs related to the location                   |
+| personalityMatches    | array           | list of personality types that would enjoy this location    |
+
+## Event
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| eventId               | string          | unique identifier for the event                             |
+| name                  | string          | name of the event                                           |
+| description           | string          | description of the event                                    |
+| startDate             | string          | start date of the event                                     |
+| endDate               | string          | end date of the event                                       |
+| locationId            | string          | the location where the event takes place                    |
+| personalityMatches    | array           | list of personality types that match the event              |
+
+## Challenge
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| challengeId           | string          | unique identifier for the challenge                         |
+| name                  | string          | name of the challenge                                       |
+| description           | string          | description of what the challenge entails                   |
+| rewardPoints          | number          | number of reward points awarded upon completion             |
+| eventId               | string          | the ID of an assosiated event                               |
+
+## Reward
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| rewardId              | string          | unique identifier for the reward                            |
+| name                  | string          | name of the reward                                          |
+| type                  | string          | type of the reward                                          |
+| pointsCost            | number          | number of reward points required to redeem  the award       |
+| description           | string          | details about the award                                     |
+| availability          | string          | whether the award ois currently available                   |
