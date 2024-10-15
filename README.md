@@ -138,7 +138,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 
 #### List of network requests by screen
 (Read/GET) Query all suggested locations for the user based on personality type
--Home Feed Screen
+- Home Feed Screen
   
 ```
 let query = db.collection("Locations")
@@ -150,4 +150,33 @@ query.get().then((locations) => {
 }).catch((error) => {
   console.log("Error getting locations:", error);
 });
+```
+
+- Rewards Screen
+```
+let query = db.collection("Rewards")
+query.where("availability", "==", true)
+query.get().then((rewards) => {
+  console.log("Successfully retrieved rewards:", rewards.docs.length);
+  // TODO: Display available rewards
+}).catch((error) => {
+  console.log("Error getting rewards:", error);
+});
+```
+
+Profile Screen
+- (Read/GET) Query logged-in user's profile information
+```
+let query = db.collection("Users").doc(currentUser.id)
+query.get().then((userDoc) => {
+  if (userDoc.exists) {
+    console.log("User data:", userDoc.data());
+    // TODO: Display profile data
+  } else {
+    console.log("No such user found");
+  }
+}).catch((error) => {
+  console.log("Error getting user data:", error);
+});
+
 ```
