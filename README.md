@@ -137,3 +137,17 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 ### Networking
 
 #### List of network requests by screen
+(Read/GET) Query all suggested locations for the user based on personality type
+-Home Feed Screen
+  
+```
+let query = db.collection("Locations")
+query.where("personalityMatches", "array-contains", currentUser.personalityType)
+query.orderBy("popularity", "desc")
+query.get().then((locations) => {
+  console.log("Successfully retrieved locations:", locations.docs.length);
+  // TODO: Display locations in feed
+}).catch((error) => {
+  console.log("Error getting locations:", error);
+});
+```
