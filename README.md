@@ -137,46 +137,58 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 ### Networking
 
 #### List of network requests by screen
-(Read/GET) Query all suggested locations for the user based on personality type
+
+- Log-in Screen
+  - (Read/GET) User Login Request (Authenticate User)
+    ```
+    let loginRequest = {
+      username: enteredUsername,
+      password: enteredPassword
+    };
+    
+    auth.signInWithEmailAndPassword(loginRequest.username, loginRequest.password)
+    .then((userCredential) => {
+       console.log("User authenticated:", userCredential.user);
+       // TODO: Redirect user to home screen
+    })
+    .catch((error) => {
+       console.log("Login failed:", error.message);
+       // TODO: Display error to user
+    });
+
+    ```
+  - (Create/POST) Create a new user account (sign-up).
+  - (Read/GET) Send a password reset link to the user's email.
+  - (Read/GET) Retrieve the username based on the user's email.
+
 - Home Feed Screen
-  
-```
-let query = db.collection("Locations")
-query.where("personalityMatches", "array-contains", currentUser.personalityType)
-query.orderBy("popularity", "desc")
-query.get().then((locations) => {
-  console.log("Successfully retrieved locations:", locations.docs.length);
-  // TODO: Display locations in feed
-}).catch((error) => {
-  console.log("Error getting locations:", error);
-});
-```
+  - (Read/GET) Fetch user data to display a personalized welcome message (e.g., "Welcome back, [User's Name]!")
+  - (Read/GET) Implement a search feature that queries locations, events, and challenges based on user input in the search bar
+  - (Read/GET) Query personalized location recommendations based on the user's personality type
+  - (Read/GET) Query personalized event recommendations based on the user's interests and past activities
+  - (Read/GET) Query upcoming challenges or milestones tailored to the user
+  - (Read/GET) Fetch the user's recent activity, such as events they’ve recently participated in, challenges completed, and locations visited
+  - (Read/GET) Display the user’s favorite locations and events for quick access
+  - (Read/GET) Query events the user is marked as interested in or has pending RSVPs
+  - (Read/GET) Query challenges the user has started but not yet completed
+  - (Read/GET) Fetch a list of upcoming events the user has signed up for or shown interest in
+  - (Read/GET) Fetch a list of upcoming events based on the user's current location (e.g., nearby festivals, concerts, etc.)
+  - (Read/GET) Display the user's current reward points
+  - (Read/GET) Query available rewards that the user can redeem with their points
 
 - Rewards Screen
-```
-let query = db.collection("Rewards")
-query.where("availability", "==", true)
-query.get().then((rewards) => {
-  console.log("Successfully retrieved rewards:", rewards.docs.length);
-  // TODO: Display available rewards
-}).catch((error) => {
-  console.log("Error getting rewards:", error);
-});
-```
+  - (Read/GET) Fetch the user's current reward points balance
+  - (Read/GET) Query all available rewards that the user can redeem based on their current point balance.
+  - (Create/POST) Redeem a reward using the user’s reward points
+  - (Read/GET) Query the user's reward redemption history
+  - (Read/GET) Query special or featured rewards based on the user’s behavior (e.g., most redeemed rewards, rewards related to locations the user has visited).
+  
+- Profile Screen
+  - (Update/PUT) Update or change the user’s profile picture.
+  - (Read/GET) Fetch the user's profile details (e.g., name, email, profile picture, personality type).
+  - (Update/PUT) Allow the user to update their profile information (e.g., name, email, bio, preferences)
+  - (Read/GET) Fetch user account settings (e.g., notification preferences, language, privacy settings)
+  - (Update/PUT) Allow the user to update their password
+  - (Delete) Deactivate or delete the user’s account
 
-Profile Screen
-- (Read/GET) Query logged-in user's profile information
-```
-let query = db.collection("Users").doc(currentUser.id)
-query.get().then((userDoc) => {
-  if (userDoc.exists) {
-    console.log("User data:", userDoc.data());
-    // TODO: Display profile data
-  } else {
-    console.log("No such user found");
-  }
-}).catch((error) => {
-  console.log("Error getting user data:", error);
-});
 
-```
