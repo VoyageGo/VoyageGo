@@ -183,7 +183,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
   - (Read/GET) Query the user's reward redemption history
   - (Read/GET) Query special or featured rewards based on the user’s behavior (e.g., most redeemed rewards, rewards related to locations the user has visited).
  
- - Challenges Screen
+- Challenges Screen
   - (Read/GET) Challenge notifications: Fetch notifications or reminders related to challenges.
   - (Read/GET) Recommended challenges: Fetch challenges recommended for the user based on their preferences or activity.
   - (Read/GET) Available challenges: Retrieves all current challenges available to the user.
@@ -194,19 +194,19 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
   - (Create/POST) Mark challenge as completed: Mark the challenge as complete and reward the user.
   - (Update/PUT) Update challenge progress: Update the user’s progress for ongoing challenges.
 
- - Navigator Screen
+- Navigator Screen
   - (Read/GET) Fetch user’s current location: Retrieve the user’s GPS coordinates to display on the map.
   - (Read/GET) Fetch nearby recommended destinations: Retrieve a list of nearby recommended destinations based on the user's preferences and location.
   - (Read/GET) Fetch recommended routes/directions: Provide recommended routes or directions to a selected destination.
   - (Read/GET) Fetch popular nearby attractions: Retrieve a list of popular nearby destinations or attractions.
   - (Read/GET) Search for destinations on the map: Allow users to search for specific destinations or attractions on the map.
 
- - Profile Screen
+- Profile Screen
   - (Update/PUT) Update or change the user’s profile picture.
   - (Read/GET) Fetch the user's profile details (e.g., name, email, profile picture, personality type).
   - (Update/PUT) Allow the user to update their profile information (e.g., name, email, bio, preferences)
   - (Read/GET) Fetch user account settings (e.g., notification preferences, language, privacy settings)
-  
+
 - Settings Screen
   - (Read/GET) Account settings: Fetch user account information (email, phone number, linked accounts).
   - (Update/PUT) Update account settings: Change the user’s contact information or linked accounts.
