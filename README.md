@@ -182,13 +182,45 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
   - (Create/POST) Redeem a reward using the user’s reward points
   - (Read/GET) Query the user's reward redemption history
   - (Read/GET) Query special or featured rewards based on the user’s behavior (e.g., most redeemed rewards, rewards related to locations the user has visited).
-  
-- Profile Screen
+ 
+ - Challenges Screen
+  - (Read/GET) Challenge notifications: Fetch notifications or reminders related to challenges.
+  - (Read/GET) Recommended challenges: Fetch challenges recommended for the user based on their preferences or activity.
+  - (Read/GET) Available challenges: Retrieves all current challenges available to the user.
+  - (Read/GET) Expiring challenges: Fetch challenges that are nearing their expiration date.
+  - (Read/GET) Ongoing challenges: Fetch the user's in-progress challenges.
+  - (Read/GET) Completed challenges: Fetch all challenges the user has completed.
+  - (Read/GET) Challenge details: Fetch detailed information about a specific challenge.
+  - (Create/POST) Mark challenge as completed: Mark the challenge as complete and reward the user.
+  - (Update/PUT) Update challenge progress: Update the user’s progress for ongoing challenges.
+
+ - Navigator Screen
+  - (Read/GET) Fetch user’s current location: Retrieve the user’s GPS coordinates to display on the map.
+  - (Read/GET) Fetch nearby recommended destinations: Retrieve a list of nearby recommended destinations based on the user's preferences and location.
+  - (Read/GET) Fetch recommended routes/directions: Provide recommended routes or directions to a selected destination.
+  - (Read/GET) Fetch popular nearby attractions: Retrieve a list of popular nearby destinations or attractions.
+  - (Read/GET) Search for destinations on the map: Allow users to search for specific destinations or attractions on the map.
+
+ - Profile Screen
   - (Update/PUT) Update or change the user’s profile picture.
   - (Read/GET) Fetch the user's profile details (e.g., name, email, profile picture, personality type).
   - (Update/PUT) Allow the user to update their profile information (e.g., name, email, bio, preferences)
   - (Read/GET) Fetch user account settings (e.g., notification preferences, language, privacy settings)
-  - (Update/PUT) Allow the user to update their password
-  - (Delete) Deactivate or delete the user’s account
-
-
+  
+- Settings Screen
+  - (Read/GET) Account settings: Fetch user account information (email, phone number, linked accounts).
+  - (Update/PUT) Update account settings: Change the user’s contact information or linked accounts.
+  - (Read/GET) Notification settings: Retrieve current notification preferences (push, email, SMS).
+  - (Update/PUT) Update notification settings: Enable or disable specific types of notifications.
+  - (Read/GET) Privacy settings: Fetch user’s current privacy settings (profile visibility, data sharing).
+  - (Update/PUT) Update privacy settings: Adjust privacy controls (public/private profile, data sharing preferences).
+  - (Read/GET) App settings: Fetch theme (light/dark) and language preferences.
+  - (Update/PUT) Update app settings: Switch between themes, change app language.
+  - (Update/PUT) Change password: Update the user’s password securely.
+  - (Delete) Account deletion request: Deactivate or delete the user’s account.
+  - (Read/GET) Fetch permissions: Retrieve permissions granted to the app (e.g., location, camera, microphone).
+  - (Update/PUT) Update permissions: Enable or disable app permissions.
+  - (Read/GET) Language and region preferences: Fetch language and region settings.
+  - (Update/PUT) Update language and region: Adjust language or region preferences.
+ 
+ 
