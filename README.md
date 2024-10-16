@@ -5,6 +5,7 @@
 1. [Overview](#overview)
 2. [Product Spec](#product-spec)
 3. [Wireframes](#wireframes)
+4. [Schema](#schema)
 
 ## Overview
 ### Description
