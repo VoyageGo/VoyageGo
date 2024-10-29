@@ -138,7 +138,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 ### Networking
 
 #### List of network requests by screen
-
+```
 - Log-in Screen
   - (Read/GET) User Login Request (Authenticate User)
     ```
