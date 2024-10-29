@@ -142,20 +142,41 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 - Log-in Screen
   - (Read/GET) User Login Request (Authenticate User)
     ```
-    let loginRequest = {
-      username: enteredUsername,
-      password: enteredPassword
-    };
-    
-    auth.signInWithEmailAndPassword(loginRequest.username, loginRequest.password)
+   function loginUser(username, password) {
+  let loginRequest = {
+    username: username,
+    password: password
+  };
+
+  auth.signInWithEmailAndPassword(loginRequest.username, loginRequest.password)
     .then((userCredential) => {
-       console.log("User authenticated:", userCredential.user);
-       // TODO: Redirect user to home screen
+      console.log("User authenticated:", userCredential.user);
+      // TODO: Redirect user to home screen
     })
     .catch((error) => {
-       console.log("Login failed:", error.message);
-       // TODO: Display error to user
+      console.log("Login failed:", error.message);
+      // TODO: Display error to user
     });
+}
+
+// Example calls for each user
+loginUser("user1@example.com", "password123!");
+loginUser("user2@example.com", "securePass!45");
+loginUser("user3@example.com", "myPassword!92");
+loginUser("user4@example.com", "passwordABC!12");
+loginUser("user5@example.com", "passWord!56");
+loginUser("user6@example.com", "passwordXyZ!34");
+loginUser("user7@example.com", "pass789word!");
+loginUser("user8@example.com", "wordPass!21");
+loginUser("user9@example.com", "securePass!67");
+loginUser("user10@example.com", "password789!");
+loginUser("user11@example.com", "loginSecure!99");
+loginUser("user12@example.com", "safePass!11");
+loginUser("user13@example.com", "uniquePass!22");
+loginUser("user14@example.com", "loginWord!33");
+loginUser("user15@example.com", "randomPass!55");
+loginUser("user16@example.com", "unique789!
+
 
     ```
   - (Create/POST) Create a new user account (sign-up).
