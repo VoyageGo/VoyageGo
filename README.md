@@ -46,23 +46,6 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 - [ ] Users can change app language and region preferences.
 - [ ] Users can use offline mode to access maps, challenges, and app features without an internet connection.
 
-#### Required Must-Have Stores 
- * Users log in to access their personalized AI travel buddy, past conversations, and travel preferences.
- * AI buddy provides real-time travel advice based on the user’s location and preferences.
- * Users are guided by an interactive map to explore cities, including personalized travel recommendations.
- * Users receive cultural tips, language translation assistance, and safety alerts.
- * Users complete travel missions (e.g., visiting landmarks, trying local food) to unlock rewards such as discounts on Uber or nearby hotels.
- * AI travel journal automatically captures and organizes travel memories, including photos, voice notes, and locations.
- * Profile pages for each user, including travel history, achievements, and favorite experiences.
- * Customizable personality selection for the AI travel buddy (e.g., humorous, adventurous, or calm).
-#### Optional Nice-To-Have Stories
- * Immersive storytelling and trivia features when visiting historical sites.
- * Multiplayer mode where users can collaborate on travel missions or challenges.
- * Real-time travel challenges with interactive maps and hidden cultural gems.
- * Integrated social connection features for meeting fellow travelers or locals.
- * Users can earn virtual badges or rewards for completing travel challenges.
- * Voice interaction with the AI travel buddy for hands-free assistance while navigating.
- * Offline mode for maps, AI interactions, and challenge tracking without internet access.
 
 ### 2. Screens
 
