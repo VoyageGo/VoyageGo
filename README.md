@@ -19,7 +19,33 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
  * **Scope:** Initially focusing on personalized travel suggestions and virtual companionship, VoyageGo could evolve to integrate augmented reality (AR) for real-time exploration, expand its language translation tools, and partner with major travel services. VoyageGo could also evolve into a full travel ecosystem, with integration into local transportation, hotels, restaurants, and activity booking systems. 
 
 ## Product Spec
-### 1. User Stories (Required or Optional)
+### 1. User Stories (Required and Optional)
+
+#### Required Must-Have Stories
+
+- [x] Users can log in with their username and password to access their account.
+- [x] Users can create a new account to start using the app.
+- [x] Users can view personalized location recommendations based on their personality type.
+- [x] Users can view personalized event recommendations based on their interests and past activities.
+- [x] Users can see upcoming challenges or milestones tailored to their preferences.
+- [x] Users can view their current reward points balance.
+- [x] Users can browse all rewards they can redeem with their points.
+- [x] Users can redeem rewards using their points.
+- [x] Users can see their current location on a map for navigation.
+
+#### Optional Nice-to-Have Stories
+- [ ] Users can reset their password if forgotten.
+- [ ] Users can quickly access favorite locations and events.
+- [ ] Users can view recent activity, such as events they’ve participated in and challenges they’ve completed.
+- [ ] Users can see special or featured rewards based on their behavior.
+- [ ] Users can view recommended challenges based on their preferences or activity.
+- [ ] Users can see all currently available challenges.
+- [ ] Users can mark challenges as completed and earn reward.
+- [ ] Users can search for specific destinations or attractions on the map.
+- [ ] Users can securely update their password.
+- [ ] Users can change app language and region preferences.
+- [ ] Users can use offline mode to access maps, challenges, and app features without an internet connection.
+
 #### Required Must-Have Stores 
  * Users log in to access their personalized AI travel buddy, past conversations, and travel preferences.
  * AI buddy provides real-time travel advice based on the user’s location and preferences.
@@ -158,8 +184,6 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
       // TODO: Display error to user
     });
 }
-
-
 
 
     ```
