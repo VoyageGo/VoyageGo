@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>TravelJournalEntry.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+TravelJournalEntry.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">edu</span><span class="s2">.</span><span class="s1">famu</span><span class="s2">.</span><span class="s1">voyagego</span><span class="s2">.</span><span class="s1">models</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">google</span><span class="s2">.</span><span class="s1">cloud</span><span class="s2">.</span><span class="s1">Timestamp</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">google</span><span class="s2">.</span><span class="s1">cloud</span><span class="s2">.</span><span class="s1">firestore</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.</span><span class="s1">DocumentId</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">lombok</span><span class="s2">.</span><span class="s1">AllArgsConstructor</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">lombok</span><span class="s2">.</span><span class="s1">Data</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">lombok</span><span class="s2">.</span><span class="s1">NoArgsConstructor</span><span class="s2">;</span>
+
+<span class="s1">@Data</span>
+<span class="s1">@NoArgsConstructor</span>
+<span class="s1">@AllArgsConstructor</span>
+<span class="s0">public class </span><span class="s1">TravelJournalEntry </span><span class="s2">{</span>
+    <span class="s1">@DocumentId</span>
+    <span class="s0">private </span><span class="s1">String entryId</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">String userId</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">String title</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">String content</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">String location</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Timestamp date</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">String getEntryId</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">entryId</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

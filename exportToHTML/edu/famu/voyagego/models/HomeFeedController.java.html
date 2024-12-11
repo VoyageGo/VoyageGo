@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>HomeFeedController.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HomeFeedController.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">edu</span><span class="s2">.</span><span class="s1">famu</span><span class="s2">.</span><span class="s1">voyagego</span><span class="s2">.</span><span class="s1">models</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">bind</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.*;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s1">@RestController</span>
+<span class="s1">@RequestMapping</span><span class="s2">(</span><span class="s3">&quot;/api/feed&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">HomeFeedController </span><span class="s2">{</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/welcome/{userId}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String getWelcomeMessage</span><span class="s2">(</span><span class="s1">@PathVariable String userId</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s3">&quot;Welcome back, &quot; </span><span class="s2">+ </span><span class="s1">userId </span><span class="s2">+ </span><span class="s3">&quot;!&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/search&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">search</span><span class="s2">(</span><span class="s1">@RequestParam String query</span><span class="s2">) {</span>
+        <span class="s4">// Implement search logic (e.g., locations, events, challenges)</span>
+        <span class="s0">return </span><span class="s1">List</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s3">&quot;Search result 1&quot;</span><span class="s2">, </span><span class="s3">&quot;Search result 2&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/recommendations/locations/{userId}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">getLocationRecommendations</span><span class="s2">(</span><span class="s1">@PathVariable String userId</span><span class="s2">) {</span>
+        <span class="s4">// Return personalized location recommendations</span>
+        <span class="s0">return </span><span class="s1">List</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s3">&quot;Location 1&quot;</span><span class="s2">, </span><span class="s3">&quot;Location 2&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s3">&quot;/recommendations/events/{userId}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">getEventRecommendations</span><span class="s2">(</span><span class="s1">@PathVariable String userId</span><span class="s2">) {</span>
+        <span class="s4">// Return personalized event recommendations</span>
+        <span class="s0">return </span><span class="s1">List</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s3">&quot;Event 1&quot;</span><span class="s2">, </span><span class="s3">&quot;Event 2&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>
