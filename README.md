@@ -34,17 +34,15 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 - [x] Users can see their current location on a map for navigation.
 
 #### Optional Nice-to-Have Stories
-- [ ] Users can reset their password if forgotten.
-- [ ] Users can quickly access favorite locations and events.
-- [ ] Users can view recent activity, such as events they’ve participated in and challenges they’ve completed.
-- [ ] Users can see special or featured rewards based on their behavior.
+- [X] Users can reset their password if forgotten.
+- [X] Users can quickly access favorite locations and events.
+- [X] Users can view recent activity, such as events they’ve participated in and challenges they’ve completed.
 - [ ] Users can view recommended challenges based on their preferences or activity.
 - [ ] Users can see all currently available challenges.
 - [ ] Users can mark challenges as completed and earn reward.
 - [ ] Users can search for specific destinations or attractions on the map.
 - [ ] Users can securely update their password.
 - [ ] Users can change app language and region preferences.
-- [ ] Users can use offline mode to access maps, challenges, and app features without an internet connection.
 
 
 ### 2. Screens
