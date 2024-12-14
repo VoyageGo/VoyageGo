@@ -25,21 +25,21 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 
 - [x] Users can log in with their username and password to access their account.
 - [x] Users can create a new account to start using the app.
-- [x] Users can view personalized location recommendations based on their personality type.
-- [x] Users can view personalized event recommendations based on their interests and past activities.
+- [x] Users can view personalized location recommendations based on their travel preferences.
 - [x] Users can see upcoming challenges or milestones tailored to their preferences.
 - [x] Users can view their current reward points balance.
 - [x] Users can browse all rewards they can redeem with their points.
 - [x] Users can redeem rewards using their points.
 - [x] Users can see their current location on a map for navigation.
+- [x] Users can delete their profile.
+- [x] Users can see all currently available challenges.
 
 #### Optional Nice-to-Have Stories
-- [X] Users can reset their password if forgotten.
-- [X] Users can quickly access favorite locations and events.
-- [X] Users can view recent activity, such as events they’ve participated in and challenges they’ve completed.
+- [ ] Users can reset their password if forgotten.
+- [ ] Users can quickly access favorite locations and events.
+- [ ] Users can view recent activity, such as events they’ve participated in and challenges they’ve completed.
 - [ ] Users can view recommended challenges based on their preferences or activity.
-- [ ] Users can see all currently available challenges.
-- [ ] Users can mark challenges as completed and earn reward.
+- [ ] Users can mark challenges as completed and earn rewards.
 - [ ] Users can search for specific destinations or attractions on the map.
 - [ ] Users can securely update their password.
 - [ ] Users can change app language and region preferences.
@@ -89,57 +89,98 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
 
 ### Models
 
-#### User
+#### Chat
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
-| userId                | string          | unique identifier for the user                              |
-| name                  | string          | user's full name                                            |
-| email                 | string          | user's email address                                        |
-| personalityType       | string          | user's personality type                                     |
-| rewardsPoints         | number          | total reward points earned by the user                      |
-| completedChallenges   | number          | list of challenge IDs the user has completed                |
-| favoriteDestinations  | number          | list of location IDs that the user has marked as favorites  |
+| profilleId            | string          | unique identifier for the user                              |
+| message               | string          | message for the chat                                        |
+| response              | string          | AI response to entered message                              |
 
 #### Location
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
-| locationId            | string          | unique identifier for the location                          |
-| name                  | string          | name of the location                                        |
-| type                 `| string          | type of location                                            |
+| latitude              | number          | latitude of location                                        |
+| longitude             | number          | longitude of location                                       |
 | description           | string          | brief description of the location                           |
-| coordinates           | map             | latitude and longitude of location                          |
-| relatedEvents         | array           | list of event IDs related to the location                   |
-| personalityMatches    | array           | list of personality types that would enjoy this location    |
 
-#### Event
+#### Mission
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
-| eventId               | string          | unique identifier for the event                             |
-| name                  | string          | name of the event                                           |
-| description           | string          | description of the event                                    |
-| startDate             | string          | start date of the event                                     |
-| endDate               | string          | end date of the event                                       |
-| locationId            | string          | the location where the event takes place                    |
-| personalityMatches    | array           | list of personality types that match the event              |
+| missionId             | string          | unique identifier for the mission                           |
+| profileId             | string          | User assigned to the mission                                |
+| points                | number          | Points awarded for completing the mission                   |
+| description           | string          | Description of the mission.                                 |
+| completed             | boolean         | Indicates if the mission is completed.                      |
 
-#### Challenge
+
+#### Navigator
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
-| challengeId           | string          | unique identifier for the challenge                         |
-| name                  | string          | name of the challenge                                       |
-| description           | string          | description of what the challenge entails                   |
-| rewardPoints          | number          | number of reward points awarded upon completion             |
-| eventId               | string          | the ID of an assosiated event                               |
+| navigatorId           | string          | unique identifier for the navigator                         |
+| profileId             | string          | Identifier of the user using the navigator                  |
+| currentLatitude       | number          | Latitude of the user's current location.                    |
+| currentLongitude      | number          | Longitudeof the user's current location.                    |
+| nearbyDestinations    | List<Location>	 | List of nearby destinations.                                |
+| recommendedRoutes     | List<Route>	    | List of recommended routes for navigation.                  |
+| popularAttractions    | List<String>		  | 	List of popular attractions near the user.                 |
 
-#### Reward
+
+
+#### Profile
 |        Property       |       Type      |                           Description                       |  
 |-----------------------|-----------------|-------------------------------------------------------------|
-| rewardId              | string          | unique identifier for the reward                            |
-| name                  | string          | name of the reward                                          |
-| type                  | string          | type of the reward                                          |
-| pointsCost            | number          | number of reward points required to redeem  the award       |
-| description           | string          | details about the award                                     |
-| availability          | string          | whether the award is currently available                    |
+| ProfileId             | string          | unique identifier for the user profile                      |
+| name                  | string          | name of the user                                            |
+| email                 | string          | email address of user                                       |
+| password              | String          | Password for the user's account.                            |
+| bio                   | string          | User's bio or description.                                  |
+| preference            | List<String>	   | List of the user's preferences.                             |
+
+
+#### Recommendations
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| recommendationId      | string          | unique identifier for the recommendation                    |
+| type                  | string          | Type of recommendation (e.g., "Adventure").                 |
+| description           | string          | Description of the recommendation                           |
+| location              | String          | Location description (e.g., "City, Country").               |
+| latitude              | number          | latitude of location                                        |
+| longitude             | number          | longitude of location                                       |
+
+
+#### Rewards
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| rewardId              | string          | unique identifier for the mission                           |
+| requiredPoints        | number          | Points required for redeem the award                        |
+| description           | string          | Description of the reward.                                  |
+| location              | String          | Location-specific availability of the reward.               |
+
+### Route
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| origin                | Location        | Starting point of the route.                                |
+| destination           | Location        | Ending point of the route.                                  |
+| routeDetails          | string          | Details about the route (e.g., directions).                 |
+
+
+### Setting
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| profileId             | string          | Identifier of the user using the navigator                  |
+| darkMode              | Boolean         | Indicates if dark mode is enabled.                          |
+| language              | string          | Language preference of the user.                            |
+
+
+#### TravelJournalEntry
+|        Property       |       Type      |                           Description                       |  
+|-----------------------|-----------------|-------------------------------------------------------------|
+| entryId               | string          | unique identifier for the journal entry                     |
+| profileId             | string          | Identifier of the user who created the entry                |
+| title	                | string          | Title of the journal entry                                  |
+| location              | String          | Location associated with the journal entry.                 |
+| content               | String          | Content of the journal entry.                               |
+| date                  | String          | Date the entry was created.                                 |
 
 
 ### Networking
@@ -194,7 +235,7 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
   - (Read/GET) Query the user's reward redemption history
   - (Read/GET) Query special or featured rewards based on the user’s behavior (e.g., most redeemed rewards, rewards related to locations the user has visited).
  
-- Challenges Screen
+- Missions Screen
   - (Read/GET) Challenge notifications: Fetch notifications or reminders related to challenges.
   - (Read/GET) Recommended challenges: Fetch challenges recommended for the user based on their preferences or activity.
   - (Read/GET) Available challenges: Retrieves all current challenges available to the user.
