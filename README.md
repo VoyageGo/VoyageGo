@@ -6,6 +6,9 @@
 2. [Product Spec](#product-spec)
 3. [Wireframes](#wireframes)
 4. [Schema](#schema)
+5. [Presentation](#presentation)
+6. [Backend Link](#backend)
+7. [Frontend Link](#frontend)
 
 ## Overview
 ### Description
@@ -274,5 +277,16 @@ VoyageGo serves as a travel companion that not only provides practical travel ad
   - (Update/PUT) Update permissions: Enable or disable app permissions.
   - (Read/GET) Language and region preferences: Fetch language and region settings.
   - (Update/PUT) Update language and region: Adjust language or region preferences.
+
+```
+
+## VoyageGo Presentation
+[CIS Poster Template.pptx](https://github.com/user-attachments/files/18135176/CIS.Poster.Template.pptx)
+
+
+## Backend
+[Navigate to the code](https://github.com/VoyageGo/VoyageGo/tree/master/src)
+
+## Frontend
  
- 
+[Navigate to the code](https://github.com/VoyageGo/VoyageGo/tree/frontend/src)
