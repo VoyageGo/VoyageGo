@@ -2,22 +2,22 @@ package edu.famu.voyagego.models;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 public class Navigator {
+
     @DocumentId
     private String navigatorId;
-    private String userId;
-    private String currentLocation;
-    private List<String> nearbyDestinations;   // Changed from String[] to List<String>
-    private List<String> recommendedRoutes;    // Changed from String[] to List<String>
-    private List<String> popularAttractions;
+    private String profileId;
+    private double currentLatitude;           // Latitude for current location
+    private double currentLongitude;          // Longitude for current location
+    private List<Location> nearbyDestinations; // List of nearby destinations
+    private List<Route> recommendedRoutes;     // List of recommended routes
+    private List<String> popularAttractions;   // List of popular attractions
 
     public String getNavigatorId() {
         return navigatorId;
@@ -27,35 +27,43 @@ public class Navigator {
         this.navigatorId = navigatorId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getProfileId() {
+        return profileId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 
-    public String getCurrentLocation() {
-        return currentLocation;
+    public double getCurrentLatitude() {
+        return currentLatitude;
     }
 
-    public void setCurrentLocation(String currentLocation) {
-        this.currentLocation = currentLocation;
+    public void setCurrentLatitude(double currentLatitude) {
+        this.currentLatitude = currentLatitude;
     }
 
-    public List<String> getNearbyDestinations() {
+    public double getCurrentLongitude() {
+        return currentLongitude;
+    }
+
+    public void setCurrentLongitude(double currentLongitude) {
+        this.currentLongitude = currentLongitude;
+    }
+
+    public List<Location> getNearbyDestinations() {
         return nearbyDestinations;
     }
 
-    public void setNearbyDestinations(List<String> nearbyDestinations) {
+    public void setNearbyDestinations(List<Location> nearbyDestinations) {
         this.nearbyDestinations = nearbyDestinations;
     }
 
-    public List<String> getRecommendedRoutes() {
+    public List<Route> getRecommendedRoutes() {
         return recommendedRoutes;
     }
 
-    public void setRecommendedRoutes(List<String> recommendedRoutes) {
+    public void setRecommendedRoutes(List<Route> recommendedRoutes) {
         this.recommendedRoutes = recommendedRoutes;
     }
 

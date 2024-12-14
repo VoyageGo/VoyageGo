@@ -1,31 +1,17 @@
 package edu.famu.voyagego.models;
 
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldValue;
-import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rewards {
-
     @DocumentId
     private String rewardId;
-    private String userId;
     private String description;
-    private int pointsRequired;
-    private boolean isRedeemed;
+    private int requiredPoints;
+    private String location; // Removed "1" for better naming consistency
 
     public String getRewardId() {
         return rewardId;
@@ -33,14 +19,6 @@ public class Rewards {
 
     public void setRewardId(String rewardId) {
         this.rewardId = rewardId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getDescription() {
@@ -51,19 +29,19 @@ public class Rewards {
         this.description = description;
     }
 
-    public int getPointsRequired() {
-        return pointsRequired;
+    public int getRequiredPoints() {
+        return requiredPoints;
     }
 
-    public void setPointsRequired(int cost) {
-        this.pointsRequired = cost;
+    public void setRequiredPoints(int requiredPoints) {
+        this.requiredPoints = requiredPoints;
     }
 
-    public boolean isRedeemed() {
-        return isRedeemed;
+    public String getLocation() {
+        return location;
     }
 
-    public void setRedeemed(boolean redeemed) {
-        isRedeemed = redeemed;
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

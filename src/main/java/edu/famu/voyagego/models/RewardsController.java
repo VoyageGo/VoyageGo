@@ -1,17 +1,15 @@
 package edu.famu.voyagego.models;
 
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.FieldValue;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import edu.famu.voyagego.models.Rewards;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.google.cloud.firestore.DocumentSnapshot;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rewards")
@@ -20,159 +18,135 @@ public class RewardsController {
     @Autowired
     private Firestore firestore;
 
-    // Add a new reward
-    @PostMapping
-    public String createReward(@RequestBody Rewards newReward) {
-        try {
-            // Create a document in the 'rewards' collection with the new reward
-            DocumentReference docRef = firestore.collection("rewards").document(newReward.getRewardId());
-            docRef.set(newReward).get(); // Save the reward document in Firestore
-
-            return "Reward created successfully!";
-        } catch (Exception e) {
-            return "Error creating reward: " + e.getMessage();
-        }
-    }
-
-    // Get user's reward points
-    @GetMapping("/balance/{userId}")
-    public String getRewardPoints(@PathVariable String userId) {
-        try {
-            // Fetch the user's document from Firestore
-            DocumentSnapshot userSnapshot = firestore.collection("users").document(userId).get().get();
-
-            if (!userSnapshot.exists()) {
-                return "Error: User with userId " + userId + " not found.";
-            }
-
-            // Fetch reward points from the user data (assuming the reward points are part of the user's document)
-            int rewardPoints = userSnapshot.getLong("rewardPoints").intValue(); // Or the actual field where reward points are stored
-
-            return "User reward points: " + rewardPoints;
-        } catch (Exception e) {
-            return "Error retrieving reward points: " + e.getMessage();
-        }
-    }
-
-    // Get all available rewards
     @GetMapping("/available")
-    public List<Rewards> getAvailableRewards() throws ExecutionException, InterruptedException {
+    public ResponseEntity<List<Rewards>> getAvailableRewards(
+            @RequestParam String location,
+            @RequestParam String profileId) {
         try {
-            List<Rewards> availableRewards = new ArrayList<>();
-            firestore.collection("rewards")
-                    .get()
-                    .get()
-                    .forEach(doc -> {
-                        Rewards reward = doc.toObject(Rewards.class);
-                        if (reward != null) {
-                            availableRewards.add(reward);
-                        }
-                    });
-            return availableRewards;
+            // Fetch rewards for the given location
+            List<QueryDocumentSnapshot> rewardDocs = firestore.collection("rewards").get().get().getDocuments();
+            List<Rewards> locationRewards = rewardDocs.stream()
+                    .map(doc -> doc.toObject(Rewards.class))
+                    .filter(reward -> reward.getLocation() != null && reward.getLocation().equalsIgnoreCase(location))
+                    .collect(Collectors.toList());
+
+            // Fetch user points
+            DocumentSnapshot profileDoc = firestore.collection("profiles").document(profileId).get().get();
+            int userPoints = profileDoc.contains("points") ? profileDoc.getLong("points").intValue() : 0;
+
+            // Filter rewards the user can afford
+            List<Rewards> availableRewards = locationRewards.stream()
+                    .filter(reward -> reward.getRequiredPoints() <= userPoints)
+                    .toList();
+
+            return ResponseEntity.ok(availableRewards);
         } catch (Exception e) {
-            throw new RuntimeException("Error retrieving available rewards: " + e.getMessage());
+            return ResponseEntity.status(500).body(Collections.emptyList());
         }
     }
 
-    // Redeem a reward
+
+
+
+
+
+
+
+
     @PostMapping("/redeem")
-    public ResponseEntity<String> redeemReward(@RequestBody RedeemRequest redeemRequest) {
+    public ResponseEntity<String> redeemReward(@RequestBody Map<String, String> request) {
+        String profileId = request.get("profileId");
+        String rewardId = request.get("rewardId");
+
         try {
-            // Fetch the reward from Firestore
-            DocumentSnapshot rewardSnapshot = firestore.collection("rewards")
-                    .document(redeemRequest.getRewardId())
-                    .get()
-                    .get();
-
-            if (rewardSnapshot.exists()) {
-                Rewards reward = rewardSnapshot.toObject(Rewards.class);
-
-                // Check if the reward has already been redeemed
-                if (reward != null && !reward.isRedeemed()) {
-                    // Fetch the user document
-                    DocumentSnapshot userSnapshot = firestore.collection("users")
-                            .document(redeemRequest.getUserId())
-                            .get()
-                            .get();
-
-                    if (userSnapshot.exists()) {
-                        long currentPoints = userSnapshot.contains("rewardPoints") ? userSnapshot.getLong("rewardPoints") : 0;
-
-                        // Check if user has enough points to redeem the reward
-                        if (currentPoints >= reward.getPointsRequired()) {
-                            // Mark the reward as redeemed
-                            firestore.collection("rewards")
-                                    .document(redeemRequest.getRewardId())
-                                    .update("isRedeemed", true, "redeemedBy", redeemRequest.getUserId());
-
-                            // Update the user's reward points
-                            firestore.collection("users")
-                                    .document(redeemRequest.getUserId())
-                                    .update("rewardPoints", currentPoints - reward.getPointsRequired());
-
-                            // Optionally, log the redemption
-                            firestore.collection("users")
-                                    .document(redeemRequest.getUserId())
-                                    .update("redeemedRewards", FieldValue.arrayUnion(redeemRequest.getRewardId()));
-
-                            return ResponseEntity.status(HttpStatus.OK)
-                                    .body("Reward redeemed successfully by user " + redeemRequest.getUserId());
-                        } else {
-                            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                    .body("Insufficient points for redemption.");
-                        }
-                    } else {
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                .body("User not found.");
-                    }
-                } else {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("Reward is already redeemed or not available.");
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Reward not found.");
+            if (profileId == null || rewardId == null) {
+                return ResponseEntity.badRequest().body("Profile ID and Reward ID are required.");
             }
+
+            // Fetch reward details
+            DocumentSnapshot rewardDoc = firestore.collection("rewards").document(rewardId).get().get();
+            if (!rewardDoc.exists()) {
+                return ResponseEntity.status(404).body("Reward not found.");
+            }
+
+            Rewards reward = rewardDoc.toObject(Rewards.class);
+
+            // Fetch user profile
+            DocumentSnapshot profileDoc = firestore.collection("profiles").document(profileId).get().get();
+            if (!profileDoc.exists()) {
+                return ResponseEntity.status(404).body("Profile not found.");
+            }
+
+            int userPoints = profileDoc.contains("points") ? profileDoc.getLong("points").intValue() : 0;
+
+            // Check if the user has enough points
+            if (userPoints < reward.getRequiredPoints()) {
+                return ResponseEntity.badRequest().body("Insufficient points.");
+            }
+
+            // Deduct points from the user profile
+            firestore.collection("profiles").document(profileId)
+                    .update("points", userPoints - reward.getRequiredPoints()).get();
+
+            // Add redeemed reward to the `redeemedRewards` collection
+            Map<String, Object> redeemedReward = new HashMap<>();
+            redeemedReward.put("profileId", profileId);
+            redeemedReward.put("rewardId", rewardId);
+            redeemedReward.put("redeemedAt", new Date());
+            firestore.collection("redeemedRewards").add(redeemedReward).get();
+
+            return ResponseEntity.ok("Reward redeemed successfully.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error redeeming reward: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error redeeming reward: " + e.getMessage());
         }
     }
 
-    // Get the user's reward history
-    @GetMapping("/history/{userId}")
-    public List<String> getRewardHistory(@PathVariable String userId) {
+
+
+
+
+
+    @PostMapping("/create")
+    public ResponseEntity<String> createReward(@RequestBody Rewards reward) {
         try {
-            // Here you would need to fetch the history from Firestore or another source
-            // This is just a mock response for now
-            List<String> history = new ArrayList<>();
-            history.add("Reward redeemed: 'Free Coffee'");
-            history.add("Reward redeemed: 'Discount Voucher'");
-            return history;
+            if (reward.getLocation() == null || reward.getLocation().isEmpty()) {
+                return ResponseEntity.status(400).body("Location is required for rewards.");
+            }
+
+            if (reward.getRewardId() == null || reward.getRewardId().isEmpty()) {
+                reward.setRewardId(firestore.collection("rewards").document().getId());
+            }
+
+            firestore.collection("rewards").document(reward.getRewardId()).set(reward).get();
+            return ResponseEntity.status(201).body("Reward created successfully!");
         } catch (Exception e) {
-            return List.of("Error fetching reward history: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error creating reward: " + e.getMessage());
         }
     }
 
-    // Helper class to handle reward redemption requests
-    public static class RedeemRequest {
-        private String rewardId;
-        private String userId;  // User ID of the person redeeming the reward
 
-        public String getRewardId() {
-            return rewardId;
-        }
+    @GetMapping("/redeemed")
+    public ResponseEntity<List<Rewards>> getRedeemedRewards(@RequestParam String profileId) {
+        try {
+            // Fetch redeemed rewards for the user
+            List<QueryDocumentSnapshot> redeemedDocs = firestore.collection("redeemedRewards")
+                    .whereEqualTo("profileId", profileId)
+                    .get().get().getDocuments();
 
-        public void setRewardId(String rewardId) {
-            this.rewardId = rewardId;
-        }
+            List<Rewards> redeemedRewards = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : redeemedDocs) {
+                String rewardId = doc.getString("rewardId");
+                DocumentSnapshot rewardDoc = firestore.collection("rewards").document(rewardId).get().get();
+                if (rewardDoc.exists()) {
+                    redeemedRewards.add(rewardDoc.toObject(Rewards.class));
+                }
+            }
 
-        public String getUserId() {
-            return userId;
-        }
-
-        public void setUserId(String userId) {
-            this.userId = userId;
+            return ResponseEntity.ok(redeemedRewards);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Collections.emptyList());
         }
     }
+
 }

@@ -2,36 +2,33 @@ package edu.famu.voyagego.models;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Mission {
 
     @DocumentId
     private String missionId;
-    private String userId;
-    private String missionTitle;
-    private String description;
-    private String status; // e.g., "ongoing", "completed"
-    private int rewardPoints;
+    private String profileId; // User assigned to the mission
+    private String description; // Mission description
+    private int points; // Points awarded for completing the mission
+    private boolean completed; // Mission status
 
-    public int getRewardPoints() {
-        return rewardPoints;
+    public String getMissionId() {
+        return missionId;
     }
 
-    public void setRewardPoints(int rewardPoints) {
-        this.rewardPoints = rewardPoints;
+    public void setMissionId(String missionId) {
+        this.missionId = missionId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getProfileId() {
+        return profileId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 
     public String getDescription() {
@@ -42,27 +39,19 @@ public class Mission {
         this.description = description;
     }
 
-    public String getMissionTitle() {
-        return missionTitle;
+    public int getPoints() {
+        return points;
     }
 
-    public void setMissionTitle(String missionTitle) {
-        this.missionTitle = missionTitle;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
-    public String getUserId() {
-        return userId;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getMissionId() {
-        return missionId;
-    }
-
-    public void setMissionId(String missionId) {
-        this.missionId = missionId;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

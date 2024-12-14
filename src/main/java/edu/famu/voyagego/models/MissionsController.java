@@ -1,12 +1,12 @@
 package edu.famu.voyagego.models;
 
-import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.google.cloud.firestore.DocumentSnapshot;
 
-
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/missions")
@@ -15,75 +15,152 @@ public class MissionsController {
     @Autowired
     private Firestore firestore;
 
-
-    // Create a new mission
+    /**
+     * Create a new mission.
+     */
     @PostMapping("/create")
-    public String createMission(@RequestBody Mission mission) {
+    public ResponseEntity<String> createMission(@RequestBody Mission mission) {
         try {
-            // Save the Mission object to Firestore
-            firestore.collection("missions").document(mission.getMissionId()).set(mission);
-            return "Mission created successfully!";
-        } catch (Exception e) {
-            return "Error creating mission: " + e.getMessage();
-        }
-    }
-
-    // Get mission details by missionId
-    @GetMapping("/details/{missionId}")
-    public Mission getMissionDetails(@PathVariable String missionId) {
-        try {
-            // Retrieve the mission document from Firestore
-            DocumentSnapshot doc = firestore.collection("missions").document(missionId).get().get();
-
-            if (doc.exists()) {
-                return doc.toObject(Mission.class);
-            } else {
-                throw new RuntimeException("Mission not found for missionId: " + missionId);
+            if (mission.getMissionId() == null || mission.getMissionId().isEmpty()) {
+                mission.setMissionId(firestore.collection("missions").document().getId());
             }
+
+            mission.setCompleted(false); // New missions are incomplete by default
+
+            firestore.collection("missions").document(mission.getMissionId()).set(mission).get();
+
+            return ResponseEntity.status(201).body("Mission created successfully!");
         } catch (Exception e) {
-            throw new RuntimeException("Error retrieving mission: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error creating mission: " + e.getMessage());
         }
     }
 
-    // Get available missions (dummy data for now)
+    /**
+     * Get all available missions (missions not completed by the user).
+     */
     @GetMapping("/available")
-    public List<String> getAvailableMissions() {
-        return List.of("Mission 1", "Mission 2");
-    }
-
-    // Complete a mission (update status to "completed")
-    @PostMapping("/complete/{missionId}")
-    public String completeMission(@PathVariable String missionId) {
+    public ResponseEntity<List<Mission>> getAvailableMissions(@RequestParam String profileId) {
         try {
-            // Update the mission status to "completed"
-            firestore.collection("missions").document(missionId).update("status", "completed");
-            return "Mission " + missionId + " completed!";
+            List<Mission> allMissions = firestore.collection("missions").get().get().toObjects(Mission.class);
+
+            List<String> completedMissionIds = firestore.collection("completedMissions")
+                    .whereEqualTo("profileId", profileId)
+                    .get()
+                    .get()
+                    .getDocuments()
+                    .stream()
+                    .map(doc -> doc.getString("missionId"))
+                    .toList();
+
+            List<Mission> availableMissions = allMissions.stream()
+                    .filter(mission -> !completedMissionIds.contains(mission.getMissionId()))
+                    .toList();
+
+            return ResponseEntity.ok(availableMissions);
         } catch (Exception e) {
-            return "Error completing mission: " + e.getMessage();
+            return ResponseEntity.status(500).body(Collections.emptyList());
         }
     }
 
-    // Update mission progress (e.g., from 0% to 100%)
-    @PutMapping("/progress/{missionId}")
-    public String updateMissionProgress(@PathVariable String missionId, @RequestBody int progress) {
+
+    /**
+     * Get the number of missions completed by a specific user.
+     */
+    @GetMapping("/completed/{profileId}")
+    public ResponseEntity<Map<String, Object>> getCompletedMissionsCount(@PathVariable String profileId) {
         try {
-            // Update the mission progress field
-            firestore.collection("missions").document(missionId).update("progress", progress);
-            return "Mission " + missionId + " progress updated to " + progress + "%!";
+            List<QueryDocumentSnapshot> completedMissionsDocs = firestore.collection("completedMissions")
+                    .whereEqualTo("profileId", profileId)
+                    .get()
+                    .get()
+                    .getDocuments();
+
+            int totalPoints = 0;
+            List<String> completedMissionIds = new ArrayList<>();
+
+            for (DocumentSnapshot doc : completedMissionsDocs) {
+                String missionId = doc.getString("missionId");
+                completedMissionIds.add(missionId);
+
+                // Fetch mission points
+                DocumentSnapshot missionDoc = firestore.collection("missions").document(missionId).get().get();
+                if (missionDoc.exists() && missionDoc.contains("points")) {
+                    totalPoints += missionDoc.getLong("points").intValue();
+                }
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("totalCompletedMissions", completedMissionIds.size());
+            response.put("totalPoints", totalPoints);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return "Error updating mission progress: " + e.getMessage();
+            return ResponseEntity.status(500).body(Collections.singletonMap("error", e.getMessage()));
         }
     }
 
-    // Delete a mission by missionId
-    @DeleteMapping("/delete/{missionId}")
-    public String deleteMission(@PathVariable String missionId) {
+    @GetMapping("/completed")
+    public ResponseEntity<List<Mission>> getCompletedMissions(@RequestParam String profileId) {
         try {
-            // Delete the mission document from Firestore
-            firestore.collection("missions").document(missionId).delete();
-            return "Mission " + missionId + " deleted successfully!";
+            List<QueryDocumentSnapshot> completedMissionsDocs = firestore.collection("completedMissions")
+                    .whereEqualTo("profileId", profileId)
+                    .get().get().getDocuments();
+
+            List<Mission> completedMissions = new ArrayList<>();
+            for (DocumentSnapshot doc : completedMissionsDocs) {
+                String missionId = doc.getString("missionId");
+                DocumentSnapshot missionDoc = firestore.collection("missions").document(missionId).get().get();
+                if (missionDoc.exists()) {
+                    completedMissions.add(missionDoc.toObject(Mission.class));
+                }
+            }
+
+            return ResponseEntity.ok(completedMissions);
         } catch (Exception e) {
-            return "Error deleting mission: " + e.getMessage();
+            return ResponseEntity.status(500).body(Collections.emptyList());
         }
     }
+
+    @PostMapping("/complete")
+    public ResponseEntity<String> completeMission(@RequestBody Map<String, String> request) {
+        String profileId = request.get("profileId");
+        String missionId = request.get("missionId");
+
+        try {
+            // Validate input
+            if (profileId == null || missionId == null) {
+                return ResponseEntity.badRequest().body("Profile ID and Mission ID are required.");
+            }
+
+            // Update mission status in 'missions' collection
+            DocumentReference missionDoc = firestore.collection("missions").document(missionId);
+            missionDoc.update("completed", true).get();
+
+            // Retrieve mission points
+            DocumentSnapshot missionSnapshot = missionDoc.get().get();
+            int points = missionSnapshot.getLong("points").intValue();
+
+            // Update user points in 'profiles' collection
+            DocumentReference profileDoc = firestore.collection("profiles").document(profileId);
+            profileDoc.update("points", FieldValue.increment(points)).get();
+
+            // Add to 'completedMissions' collection
+            Map<String, Object> completedMission = new HashMap<>();
+            completedMission.put("profileId", profileId);
+            completedMission.put("missionId", missionId);
+            completedMission.put("completedAt", new Date());
+            firestore.collection("completedMissions").add(completedMission).get();
+
+            return ResponseEntity.ok("Mission completed successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error completing mission: " + e.getMessage());
+        }
+    }
+
+
+
+
+
+
 }

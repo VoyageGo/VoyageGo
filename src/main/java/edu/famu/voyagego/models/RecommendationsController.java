@@ -1,15 +1,11 @@
 package edu.famu.voyagego.models;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QuerySnapshot;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.google.cloud.firestore.DocumentSnapshot;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/recommendations")
@@ -18,59 +14,75 @@ public class RecommendationsController {
     @Autowired
     private Firestore firestore;
 
-    // Add a new recommendation
+    @GetMapping("/{latitude}/{longitude}")
+    public ResponseEntity<List<Recommendations>> getRecommendationsByLocationAndPreferences(
+            @PathVariable double latitude,
+            @PathVariable double longitude,
+            @RequestParam double radius,
+            @RequestParam List<String> preferences) {
+        try {
+            // Fetch all recommendations
+            var querySnapshot = firestore.collection("recommendations").get().get();
+            var allRecommendations = querySnapshot.toObjects(Recommendations.class);
+
+            // Filter recommendations by distance and preferences
+            List<Recommendations> filteredRecommendations = allRecommendations.stream()
+                    .filter(r -> distance(latitude, longitude, r.getLatitude(), r.getLongitude()) <= radius)
+                    .filter(r -> preferences.contains(r.getType()))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(filteredRecommendations);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Collections.emptyList());
+        }
+    }
+
+    private double distance(double lat1, double lon1, double lat2, double lon2) {
+        final int EARTH_RADIUS = 6371; // Radius in km
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS * c;
+    }
+
     @PostMapping
-    public String addRecommendation(@RequestBody Recommendations recommendation) {
+    public ResponseEntity<String> addRecommendation(@RequestBody Recommendations recommendation) {
         try {
-            // Save the recommendation in Firestore
-            firestore.collection("recommendations").document(recommendation.getRecommendationId()).set(recommendation).get();
-            return "Recommendation added successfully!";
-        } catch (Exception e) {
-            return "Error adding recommendation: " + e.getMessage();
-        }
-    }
-
-    // Get all recommendations for a specific user by userId
-    @GetMapping("/{userId}")
-    public List<Recommendations> getRecommendations(@PathVariable String userId) throws ExecutionException, InterruptedException {
-        try {
-            ApiFuture<QuerySnapshot> query = firestore.collection("recommendations")
-                    .whereEqualTo("userId", userId)
-                    .get();
-            List<Recommendations> recommendations = query.get().toObjects(Recommendations.class);
-            return recommendations;
-        } catch (Exception e) {
-            throw new RuntimeException("Error retrieving recommendations: " + e.getMessage());
-        }
-    }
-
-    // Get a specific recommendation by recommendationId
-    @GetMapping("/details/{recommendationId}")
-    public Recommendations getRecommendation(@PathVariable String recommendationId) throws ExecutionException, InterruptedException {
-        try {
-            DocumentSnapshot documentSnapshot = firestore.collection("recommendations")
-                    .document(recommendationId)
-                    .get()
-                    .get();
-            if (documentSnapshot.exists()) {
-                return documentSnapshot.toObject(Recommendations.class);
-            } else {
-                throw new RuntimeException("Recommendation not found for ID: " + recommendationId);
+            // Generate a recommendation ID if not provided
+            if (recommendation.getRecommendationId() == null || recommendation.getRecommendationId().isEmpty()) {
+                recommendation.setRecommendationId(firestore.collection("recommendations").document().getId());
             }
+
+            // Save the recommendation to Firestore
+            firestore.collection("recommendations").document(recommendation.getRecommendationId()).set(recommendation).get();
+
+            return ResponseEntity.status(201).body("Recommendation added successfully!");
         } catch (Exception e) {
-            throw new RuntimeException("Error retrieving recommendation: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error adding recommendation: " + e.getMessage());
         }
     }
 
-    // Delete a recommendation by recommendationId
-    @DeleteMapping("/delete/{recommendationId}")
-    public String deleteRecommendation(@PathVariable String recommendationId) {
+    @PostMapping("/filter")
+    public List<Recommendations> filterRecommendations(@RequestBody Map<String, List<String>> filter) {
         try {
-            firestore.collection("recommendations").document(recommendationId).delete().get();
-            return "Recommendation deleted successfully!";
+            List<String> preferences = filter.get("preferences");
+
+            // Fetch all recommendations
+            var querySnapshot = firestore.collection("recommendations").get().get();
+            var allRecommendations = querySnapshot.toObjects(Recommendations.class);
+
+            // Filter recommendations based on preferences
+            return allRecommendations.stream()
+                    .filter(r -> preferences.contains(r.getType()))
+                    .collect(Collectors.toList());
         } catch (Exception e) {
-            return "Error deleting recommendation: " + e.getMessage();
+            throw new RuntimeException("Error filtering recommendations: " + e.getMessage());
         }
     }
-}
 
+
+
+}

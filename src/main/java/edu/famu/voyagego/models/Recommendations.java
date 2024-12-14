@@ -1,11 +1,8 @@
 package edu.famu.voyagego.models;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,9 +10,11 @@ public class Recommendations {
 
     @DocumentId
     private String recommendationId;
-    private String userId;
-    private String type; // e.g., "restaurant", "event", "attraction"
+    private String type; // e.g., "Cultural Experiences", "Adventure Activities"
     private String description;
+    private String location; // "City, Country" for display purposes
+    private double latitude; // Coordinate for mapping
+    private double longitude; // Coordinate for mapping
 
     public String getRecommendationId() {
         return recommendationId;
@@ -23,14 +22,6 @@ public class Recommendations {
 
     public void setRecommendationId(String recommendationId) {
         this.recommendationId = recommendationId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getType() {
@@ -48,6 +39,28 @@ public class Recommendations {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }
-
-

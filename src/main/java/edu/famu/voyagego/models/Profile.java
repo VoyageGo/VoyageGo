@@ -1,9 +1,8 @@
 package edu.famu.voyagego.models;
-import java.util.List;
 
+import java.util.List;
 import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -11,21 +10,15 @@ import lombok.NoArgsConstructor;
 public class Profile {
     @DocumentId
     private String profileId;
-    private String userId;
     private String name;
     private String email;
-    private String profilePicture;
+    private String password;
+    //private String profilePicture;
     private String bio;
     private List<String> preferences;  // Changed from String[] to List<String>
-    private String personalityType;
+   // private String personalityType;
 
-    public String getPersonalityType() {
-        return personalityType;
-    }
 
-    public void setPersonalityType(String personalityType) {
-        this.personalityType = personalityType;
-    }
 
     public List<String> getPreferences() {
         return preferences;
@@ -43,13 +36,7 @@ public class Profile {
         this.bio = bio;
     }
 
-    public String getProfilePicture() {
-        return profilePicture;
-    }
 
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
 
     public String getEmail() {
         return email;
@@ -67,12 +54,12 @@ public class Profile {
         this.name = name;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getProfileId() {

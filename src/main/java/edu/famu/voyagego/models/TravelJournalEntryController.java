@@ -1,71 +1,51 @@
 package edu.famu.voyagego.models;
 
 import com.google.cloud.firestore.Firestore;
-import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
 
 @RestController
-@RequestMapping("/api/travel-journal")
+@RequestMapping("/api/journal")
 public class TravelJournalEntryController {
 
-    private final Firestore db;
+    @Autowired
+    private Firestore firestore;
 
-    public TravelJournalEntryController() {
-        this.db = FirestoreClient.getFirestore(); // Use Firestore singleton
-    }
-
-    // Create a new journal entry
     @PostMapping("/create")
-    public String createJournalEntry(@RequestBody TravelJournalEntry journalEntry) {
+    public ResponseEntity<String> createEntry(@RequestBody TravelJournalEntry entry) {
         try {
-            db.collection("travelJournal").document(journalEntry.getEntryId()).set(journalEntry).get();
-            return "Journal entry created successfully!";
+            if (entry.getEntryId() == null || entry.getEntryId().isEmpty()) {
+                entry.setEntryId(firestore.collection("journalEntries").document().getId());
+            }
+            firestore.collection("journalEntries").document(entry.getEntryId()).set(entry).get();
+            return ResponseEntity.status(201).body("Journal entry created successfully!");
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
+            return ResponseEntity.status(500).body("Error creating journal entry: " + e.getMessage());
         }
     }
 
-    // Read a specific journal entry by ID
-    @GetMapping("/{entryId}")
-    public TravelJournalEntry getJournalEntry(@PathVariable String entryId) throws ExecutionException, InterruptedException {
-        return db.collection("travelJournal").document(entryId).get().get().toObject(TravelJournalEntry.class);
-    }
-
-    // Update an existing journal entry
-    @PutMapping("/update/{entryId}")
-    public String updateJournalEntry(@PathVariable String entryId, @RequestBody TravelJournalEntry updatedEntry) {
+    @GetMapping("/{profileId}")
+    public ResponseEntity<List<TravelJournalEntry>> getEntriesByProfile(@PathVariable String profileId) {
         try {
-            db.collection("travelJournal").document(entryId).set(updatedEntry).get();
-            return "Journal entry updated successfully!";
+            List<TravelJournalEntry> entries = firestore.collection("journalEntries")
+                    .whereEqualTo("profileId", profileId).get().get()
+                    .toObjects(TravelJournalEntry.class);
+            return ResponseEntity.ok(entries);
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
+            return ResponseEntity.status(500).body(Collections.emptyList());
         }
     }
 
-    // Delete a journal entry by ID
-    @DeleteMapping("/delete/{entryId}")
-    public String deleteJournalEntry(@PathVariable String entryId) {
+    @DeleteMapping("/{entryId}")
+    public ResponseEntity<String> deleteEntry(@PathVariable String entryId) {
         try {
-            db.collection("travelJournal").document(entryId).delete().get();
-            return "Journal entry deleted successfully!";
+            firestore.collection("journalEntries").document(entryId).delete().get();
+            return ResponseEntity.ok("Journal entry deleted successfully!");
         } catch (Exception e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
+            return ResponseEntity.status(500).body("Error deleting journal entry: " + e.getMessage());
         }
-    }
-
-    // Get all journal entries for a specific user
-    @GetMapping("/user/{userId}")
-    public List<TravelJournalEntry> getUserJournalEntries(@PathVariable String userId) throws ExecutionException, InterruptedException {
-        return db.collection("travelJournal")
-                .whereEqualTo("userId", userId)
-                .get()
-                .get()
-                .toObjects(TravelJournalEntry.class);
     }
 }
